@@ -1,27 +1,50 @@
 const express = require("express");
 const fs = require("fs");
-const path = require("path");
+const { spawn } = require("child_process");
+
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 app.use(express.static(__dirname));
 
-const CONFIG_PATH = path.join(__dirname, "config.json");
+let botProcess = null;
 
-app.get("/api/config", (req, res) => {
-  const config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf8"));
-  res.json(config);
+app.get("/api/status", (req, res) => {
+  res.json({ running: !!botProcess });
 });
 
-app.post("/api/config", (req, res) => {
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(req.body, null, 2));
+app.post("/api/start", (req, res) => {
+  if (botProcess) return res.json({ ok: false, message: "Already running" });
+
+  botProcess = spawn("npx", ["tsx", "bot.ts"], { shell: true, cwd: __dirname });
+
+  botProcess.stdout.on("data", (data) => {
+    fs.appendFileSync("trades.log", data.toString());
+  });
+
+  botProcess.stderr.on("data", (data) => {
+    fs.appendFileSync("trades.log", data.toString());
+  });
+
+  botProcess.on("close", () => {
+    botProcess = null;
+  });
+
+  res.json({ ok: true });
+});
+
+app.post("/api/stop", (req, res) => {
+  if (botProcess) {
+    botProcess.kill();
+    botProcess = null;
+  }
   res.json({ ok: true });
 });
 
 app.get("/api/logs", (req, res) => {
   try {
-    const logs = fs.readFileSync("trades.log", "utf8").split("\n").slice(-60).join("\n");
+    const logs = fs.readFileSync("trades.log", "utf8").split("\n").slice(-40).join("\n");
     res.json({ logs });
   } catch {
     res.json({ logs: "No logs yet" });
@@ -29,5 +52,5 @@ app.get("/api/logs", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Trencher GUI → http://localhost:${PORT}`);
+  console.log(`Trencher running at http://localhost:${PORT}`);
 });
