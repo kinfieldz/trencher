@@ -1,0 +1,14 @@
+{
+  "chain": "solana",
+  "dexSource": "dexscreener",
+  "tradeUsd": 1.5,
+  "buyDipPercent": 1.0,
+  "sellProfitPercent": 15,
+  "stopLossPercent": 12,
+  "trailingStartPercent": 6,
+  "trailingDistancePercent": 4,
+  "maxPositions": 2,
+  "consolidateEveryCycles": 20,
+  "minLiquidityUsd": 5000,
+  "maxSlippageBps": 150
+}

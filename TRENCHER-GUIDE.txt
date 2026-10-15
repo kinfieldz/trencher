@@ -1,0 +1,74 @@
+THE TRENCHER — SETUP & USAGE GUIDE
+====================================
+
+This document explains how to set up and run The Trencher trading bot with the modular web dashboard.
+
+WHAT YOU HAVE
+-------------
+- bot.ts          → The trading bot
+- server.js       → Local web server for the dashboard
+- trencher.html   → The website / GUI
+- config.json     → Shared settings file (bot + website both use this)
+- .env            → Your private key and RPC URL
+
+REQUIREMENTS
+------------
+- Node.js installed
+- A Solana wallet private key (base58)
+- Some SOL in the wallet for trading and fees
+- A Solana RPC URL (free public or paid)
+
+SETUP STEPS
+-----------
+1. Create a folder for the project (example: C:\Users\stink\trencher)
+
+2. Put these files in the folder:
+   - bot.ts
+   - server.js
+   - trencher.html
+   - config.json
+   - .env
+
+3. Create the .env file with:
+   PRIVATE_KEY=your_base58_private_key_here
+   RPC_URL=https://your-rpc-url.com
+   JUPITER_API_KEY=optional
+
+4. Open a terminal in the folder and install dependencies:
+   npm init -y
+   npm install express @solana/web3.js bs58 dotenv
+
+HOW TO RUN
+----------
+1. Start the website:
+   node server.js
+
+   You should see:
+   Trencher GUI → http://localhost:3000
+
+2. Open your browser and go to:
+   http://localhost:3000/trencher.html
+
+3. Change any settings you want and click LOCK IN.
+
+4. Open a second terminal in the same folder and start the bot:
+   npx tsx bot.ts
+
+IMPORTANT NOTES
+---------------
+- The website and the bot share the same config.json file.
+- After changing settings in the website, restart the bot for the changes to take effect.
+- Pump.fun mode is optional and high risk. Most tokens on Pump.fun go to zero.
+- Keep both terminals open while the bot is running.
+- Stop everything with Ctrl+C in both terminals.
+
+SAFETY FEATURES (controlled from the website)
+---------------------------------------------
+- Stop Loss %
+- Trailing Stop (start % and distance %)
+- Max Open Positions
+- Min Liquidity filter
+- Max Slippage
+- Profit target and buy dip %
+
+The bot is experimental. Only use funds you can afford to lose.
