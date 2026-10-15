@@ -1,3 +1,15 @@
+## Browser Mode (Recommended)
+
+A more secure version that runs entirely in the browser. Phantom signs all transactions — no private key is ever stored in a file.
+
+1. Open `trencher-browser.html` via a local server (`npx serve .` or `node server.js`).
+2. Click **Connect Phantom**.
+3. Paste a token mint and start monitoring.
+
+The page must stay open. All swaps are signed by your connected wallet.
+
+
+
 # The Trencher
 
 A modular Solana trading bot with a local web dashboard. It dynamically sources tokens, buys on dips, manages risk with stop-losses and trailing stops, and consolidates positions back into SOL so the cycle can repeat.
